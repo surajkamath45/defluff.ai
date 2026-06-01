@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "defluff AI: The LinkedIn Edition",
+  "version": "1.0.0",
+  "description": "Strip corporate theater and broetry from your LinkedIn feed with local heuristics and T5 local summaries.",
+  "permissions": ["storage", "offscreen"],
+  "host_permissions": [
+    "https://raw.githubusercontent.com/*",
+    "https://huggingface.co/*",
+    "https://*.huggingface.co/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "styles.css",
+        "transformers/ort-wasm-simd-threaded.asyncify.wasm",
+        "transformers/ort-wasm-simd-threaded.asyncify.mjs",
+        "transformers/ort-wasm-simd-threaded.wasm",
+        "transformers/ort-wasm-simd-threaded.mjs"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "defluff AI Log"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+"content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/feed/*",
+        "https://www.linkedin.com/",
+        "https://www.linkedin.com/?*"
+      ],
+      "css": ["hide-interact.css"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://www.linkedin.com/feed/*",
+        "https://www.linkedin.com/",
+        "https://www.linkedin.com/?*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

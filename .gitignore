@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build output (npm run build)
+offscreen.bundle.js
+transformers/
+
+# Legacy vendor copies (bundled via esbuild from node_modules)
+lib/
+
+# Environment and secrets
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor (local workspace settings)
+*.code-workspace

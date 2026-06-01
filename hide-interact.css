@@ -1,0 +1,23 @@
+/* hide-interact.css - Wipes out all corporate dopamine loops instantly */
+
+/* 1. Hide the entire lower action bar (Like, Comment, Share, Send) */
+.feed-shared-social-action-bar,
+.feed-shared-update-v2__social-actions,
+.social-actions,
+.comment-box {
+    display: none !important;
+}
+
+/* 2. Hide vanity social metric counts (e.g., "Arjun and 10 others") */
+.feed-shared-social-counts,
+.update-v2-social-activity,
+.ca-social-measures {
+    display: none !important;
+}
+
+/* 3. Cleanup any custom text replacement placeholders or stray buttons */
+button[aria-label*="React"],
+button[aria-label*="Comment"],
+button[aria-label*="Share"] {
+    display: none !important;
+}

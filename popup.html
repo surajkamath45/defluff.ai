@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>defluff AI Log</title>
+  <style>
+    body {
+      width: 240px;
+      font-family: "Courier New", Courier, monospace;
+      background-color: #111;
+      color: #00ff00;
+      padding: 15px;
+      margin: 0;
+    }
+    h3 {
+      border-bottom: 1px solid #00ff00;
+      padding-bottom: 5px;
+      margin-top: 0;
+      font-size: 14px;
+      letter-spacing: 0.05em;
+    }
+    .stat {
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    .value {
+      font-weight: bold;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <h3>defluff AI LOG</h3>
+  <div class="stat">Posts Purged: <span id="purged" class="value">0</span></div>
+  <div class="stat">Broetry Lines Cut: <span id="lines" class="value">0</span></div>
+  <div class="stat">Time Reclaimed: <span id="time" class="value">0s</span></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

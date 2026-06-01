@@ -1,0 +1,16 @@
+{
+  "name": "defluff.ai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "background.js",
+  "scripts": {
+    "build": "mkdir -p transformers && cp node_modules/onnxruntime-web/dist/ort-wasm-simd-threaded* transformers/ && npx esbuild offscreen.js --bundle --format=esm --outfile=offscreen.bundle.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0"
+  }
+}
