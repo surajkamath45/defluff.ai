@@ -23,36 +23,84 @@ function getPostHash(text) {
   return `bw_${Math.abs(hash)}`;
 }
 
-// 3. COMPLETE DOM CLEANSE & SWAP (Destroys nested constraints from the inside out)
+// 3. BROADVIEW NEWSPAPER TILE INJECTION ENGINE (RESILIENT TIMESTAMP FIX)
 function injectSummarySafely(targetTextElement, parentCard, summaryText, isCached) {
   // Clear original text nodes safely
   targetTextElement.textContent = ''; 
 
-  const summaryContainer = document.createElement('div');
-  summaryContainer.className = 'defluff-summary';
+  // 💡 NEW TIMESTAMPS EXTRACTOR: Scope search strictly to the header block to avoid footer metric collisions
+  let timeString = "recently"; 
+  const headerContainer = parentCard.querySelector('.feed-shared-actor, .update-v2-social-activity__header, .feed-shared-text-view') || parentCard;
+  const targetElements = headerContainer.querySelectorAll('span, a, small');
   
-  // Apply explicit layout rules directly to our custom container
+  for (const element of targetElements) {
+    const text = element.textContent ? element.textContent.trim() : '';
+    if (!text) continue;
+
+    // Rule A: Match conversational accessibility strings ("3 hours ago", "1 day ago")
+    const longMatch = text.match(/\b(\d+)\s*(min|minute|hour|day|week|month|year)s?\s*ago\b/i);
+    if (longMatch) {
+      const value = longMatch[1];
+      let unit = longMatch[2].toLowerCase();
+      if (unit.startsWith('minu') || unit.startsWith('mini')) unit = 'min';
+      const pluralSuffix = value > 1 ? 's' : '';
+      timeString = `${value} ${unit}${pluralSuffix} ago`;
+      break;
+    }
+
+    // Rule B: Match shorthand notation tokens ("3h", "1d", "4m") safely isolated from adjacent words
+    const shortMatch = text.match(/\b(\d+)([mhdwmy])\b/i);
+    if (shortMatch) {
+      const value = shortMatch[1];
+      const unit = shortMatch[2].toLowerCase();
+      
+      // Quick filter to protect against corporate metrics in headlines (e.g., $5M, B2B, 3D)
+      if (['m', 'h', 'd', 'w', 'y'].includes(unit)) {
+        if (unit === 'm' && (text.includes('$') || text.toUpperCase().includes('ARR') || text.toUpperCase().includes('MRR'))) {
+          continue; 
+        }
+        
+        const dictionary = {
+          'm': 'min',
+          'h': 'hour',
+          'd': 'day',
+          'w': 'week',
+          'mo': 'month',
+          'y': 'year'
+        };
+        
+        const expandedUnit = dictionary[unit] || unit;
+        const pluralSuffix = value > 1 ? 's' : '';
+        timeString = `${value} ${expandedUnit}${pluralSuffix} ago`;
+        break;
+      }
+    }
+  }
+
+  // Tag the full parent card container to enforce the newspaper aesthetic styles
+  parentCard.classList.add('vintage-newspaper-tile');
+
+  // Build the underlying typography column asset
+  const summaryContainer = document.createElement('div');
+  summaryContainer.className = 'brainwash-summary';
+  
   summaryContainer.style.setProperty("display", "block", "important");
   summaryContainer.style.setProperty("height", "auto", "important");
   summaryContainer.style.setProperty("max-height", "none", "important");
   summaryContainer.style.setProperty("overflow", "visible", "important");
 
-  // Locate this line inside your injectSummarySafely block:
   const badgeElement = document.createElement('strong');
-  
-  // 💡 FIX: Update wording to simulate a 90s print headline asset
   badgeElement.textContent = isCached 
-    ? "THE DAILY DEFLUFF • ARCHIVAL WIRE REPORT •" 
-    : "DEFLUFFED SUMMARY";
+    ? `📰 DEFLUFFED (ARCHIVE) | ${timeString}` 
+    : `📰 DEFLUFFED | ${timeString}`;
 
   const textNode = document.createTextNode(summaryText);
   summaryContainer.appendChild(badgeElement);
   summaryContainer.appendChild(textNode);
   
-  // Inject clean block directly into target slot
   targetTextElement.appendChild(summaryContainer);
 
-  // DEEP TREE ERASER: Climb up from the text element up to the macro card, clearing layout constraints
+  // Deep structural layout layout loop to overwrite nested constraints
   let currentElement = targetTextElement;
   while (currentElement && currentElement !== parentCard) {
     currentElement.style.setProperty("display", "block", "important");
@@ -61,24 +109,9 @@ function injectSummarySafely(targetTextElement, parentCard, summaryText, isCache
     currentElement.style.setProperty("max-height", "none", "important");
     currentElement.style.setProperty("height", "auto", "important");
     currentElement.style.setProperty("overflow", "visible", "important");
-    
     currentElement = currentElement.parentElement;
   }
-
-  // 💡 FIX: Locate and hide the interaction bar (Like/Comment/Share) and the vanity social metrics display
-  const engagementTargets = parentCard.querySelectorAll([
-    '.feed-shared-social-action-bar',           // Main action items bar
-    '.feed-shared-update-v2__social-actions',   // Alternative layout action container
-    '.social-actions',                          // Compact view action targets
-    '.feed-shared-social-counts',              // Vanity metric counters (e.g., "500 reactions")
-    '.update-v2-social-activity'                // Shared commentary reaction headers
-  ].join(', '));
-
-  engagementTargets.forEach(element => {
-    element.style.setProperty("display", "none", "important");
-  });
 }
-
 // 4. MACRO-FIRST CORE ENGINE (diagnostic tracing enabled)
 function scanAndCleanFeed() {
   const postCards = document.querySelectorAll('div.feed-shared-update-v2, .occludable-update, .feed-shared-update-v2__contents');

@@ -1,104 +1,68 @@
-/**
- * defluff AI - Anti-dopamine brutalist terminal UI
- */
+/* styles.css - Complete Broadside Newspaper Overhaul */
 
-/* -------------------------------------------------------------------------- */
-/* 1. The Terminal Summary Box                                               */
-/* -------------------------------------------------------------------------- */
-.defluff-summary {
-   background-color: #f4f1ea !important; /* Authentic aged wood-pulp newsprint */
-   color: #111111 !important; /* Dark charcoal ink */
+/* 1. Style the entire top-level feed block */
+.vintage-newspaper-tile {
+   background-color: #f4f1ea !important; /* Aged print paper color */
+   border: 4px double #111111 !important; /* Thick double rules */
+   padding: 16px !important;
+   box-shadow: 4px 4px 0px #d9d4c7 !important;
    font-family: "Times New Roman", Times, Georgia, serif !important;
-   font-size: 14px !important;
-   line-height: 1.45 !important;
-   text-align: justify !important; /* Clean newspaper columns look */
-   padding: 14px !important;
-   margin-top: 12px !important;
-   margin-bottom: 12px !important;
-   
-   /* Classic 90s print editorial framing */
-   border: 3px double #111111 !important; 
-   box-shadow: 3px 3px 0px #d9d4c7 !important;
+   border-radius: 0px !important; /* Crisp right-angle corners */
 }
 
-.defluff-summary strong, .defluff-summary__label {
+/* 2. Force all inner nested LinkedIn layout elements to shed their modern styling */
+.vintage-newspaper-tile,
+.vintage-newspaper-tile div,
+.vintage-newspaper-tile section,
+.vintage-newspaper-tile span,
+.vintage-newspaper-tile p {
+   background-color: #f4f1ea !important;
+   color: #111111 !important;
+   font-family: "Times New Roman", Times, Georgia, serif !important;
+   border-color: #222222 !important;
+   box-shadow: none !important;
+}
+
+/* 3. Strip out modern social link styling and force clean print underlines */
+.vintage-newspaper-tile a, 
+.vintage-newspaper-tile a * {
+   color: #111111 !important;
+   text-decoration: underline !important;
+   font-weight: bold !important;
+   background-color: transparent !important;
+}
+
+/* 4. Convert all graphics/images into old ink-press sepia photographs */
+.vintage-newspaper-tile img,
+.vintage-newspaper-tile video,
+.vintage-newspaper-tile .update-components-linkedin-video__video {
+   filter: sepia(100%) contrast(85%) brightness(92%) grayscale(10%) !important;
+   border: 1px solid #111111 !important;
+   margin-top: 10px !important;
+   margin-bottom: 10px !important;
+   border-radius: 0px !important;
+}
+
+/* 5. Seamlessly blend our inner summary block layout into the new theme */
+.brainwash-summary {
+   background-color: transparent !important;
+   border: none !important;
+   box-shadow: none !important;
+   padding: 0 !important;
+   margin-top: 10px !important;
+   text-align: justify !important;
+   font-size: 14.5px !important;
+   line-height: 1.5 !important;
+}
+
+.brainwash-summary strong {
    font-family: "Times New Roman", Times, serif !important;
    font-weight: 900 !important;
    text-transform: uppercase !important;
-   letter-spacing: 0.5px !important;
    display: block !important;
-   border-bottom: 1px solid #111111 !important;
+   border-bottom: 2px solid #111111 !important; /* Section divider */
    padding-bottom: 4px !important;
-   margin-bottom: 8px !important;
-   font-size: 13px !important;
-}
-
-.defluff-summary__body {
-   color: #e0e0e0 !important;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 2. The Fluff Skeleton Loader                                               */
-/* -------------------------------------------------------------------------- */
-.defluff-loading {
-   position: relative;
-   overflow: hidden;
-   background: #1a1a1a !important;
-   color: transparent !important;
-   pointer-events: none;
-   min-height: 48px;
-}
-
-.defluff-loading * {
-   visibility: hidden !important;
-}
-
-.defluff-loading::after {
-   content: " ";
-   position: absolute;
-   top: 0;
-   right: 0;
-   bottom: 0;
-   left: 0;
-   transform: translateX(-100%);
-   background-image: linear-gradient(
-     90deg,
-     rgba(255, 255, 255, 0) 0%,
-     rgba(255, 255, 255, 0.05) 20%,
-     rgba(255, 255, 255, 0.1) 60%,
-     rgba(255, 255, 255, 0) 100%
-   );
-   animation: defluff-shimmer 1.5s infinite;
-}
-
-@keyframes defluff-shimmer {
-   100% {
-     transform: translateX(100%);
-   }
-}
-
-/* -------------------------------------------------------------------------- */
-/* 3. De-Gamifying Reactions (The Grey-Out Rule)                              */
-/* -------------------------------------------------------------------------- */
-.feed-shared-social-action-bar__action-button {
-   filter: grayscale(100%) cubic-bezier(0, 0, 0, 0) !important;
-   opacity: 0.6 !important;
-   background: transparent !important;
-   transition: none !important;
-}
-
-.feed-shared-social-action-bar__action-button .artdeco-button__icon, 
-.feed-shared-social-action-bar__action-button img {
-   display: none !important;
-}
-
-.feed-shared-social-action-bar__action-button .artdeco-button__text::after {
-   content: " [Interact]" !important;
-   font-family: monospace !important;
-   font-size: 11px !important;
-   color: #666 !important;
-}
-
-.feed-shared-social-action-bar__action-button .artdeco-button__text {
-   font-size: 0 !important;
+   margin-bottom: 10px !important;
+   font-size: 13.5px !important;
+   letter-spacing: 0.5px !important;
 }
