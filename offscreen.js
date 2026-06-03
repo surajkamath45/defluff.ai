@@ -66,24 +66,45 @@ async function executeLocalT5(text) {
   const modelPipe = await getOrCreatePipeline();
   const input = text.length > MAX_INPUT_CHARS ? text.slice(0, MAX_INPUT_CHARS) : text;
   
-  const contextFirstPrompt = `Text: ${input}\n\nNews wire report:`;
+  // 💡 FIX 1: Pre-process the text to detect perspective via JavaScript.
+  // This keeps the prompt short and natively aligned to Flan-T5's training data.
+  const isFirstPerson = /\b(I|me|my|myself|we|our|us)\b/i.test(input);
+  
+  const promptPrefix = isFirstPerson 
+    ? "Write a first-person summary of this announcement: "
+    : "Write a summary of this announcement: ";
+    
+  const contextFirstPrompt = `${promptPrefix}${input}`;
 
   const result = await modelPipe(contextFirstPrompt, {
-    max_new_tokens: 60, 
+    max_new_tokens: 120, 
     num_beams: 1,
     do_sample: false,
-    repetition_penalty: 1.5 
+    repetition_penalty: 1.6 
   });
 
   let summary = result[0]?.summary_text?.trim() || '';
 
-  // Clean up any leaked trigger labels
-  summary = summary.replace(/^News wire report:\s*/i, '');
+  // 💡 FIX 2: THE EXPANDED ANTI-ECHO SANITIZER SHIELD
+  // Dynamically scrubs away whichever prompt prefix wrapper was used.
+  const promptLeakPatterns = [
+    /^write a first-person summary of this announcement:\s*/i,
+    /^write a summary of this announcement:\s*/i,
+    /^instruction:\s*/i,
+    /^task:\s*/i,
+    /^text:\s*/i,
+    /^summary:\s*/i,
+    /^news wire report:\s*/i
+  ];
+  
+  for (const pattern of promptLeakPatterns) {
+    summary = summary.replace(pattern, '');
+  }
 
-  // 💡 FIX: Convert the verbalized word "hashtag" back into the sharp symbol "#"
-  // This also eats up any accidental trailing spaces (e.g., "hashtag FutureOfWork" -> "#FutureOfWork")
+  // Convert verbalized words back to symbols
   summary = summary.replace(/\bhashtag\s*/gi, '#');
 
+  // Clean sentence endings
   if (summary && !/[.!?]$/.test(summary)) {
     const lastPunctuation = Math.max(summary.lastIndexOf('.'), summary.lastIndexOf('!'), summary.lastIndexOf('?'));
     if (lastPunctuation > 0) {
@@ -91,5 +112,5 @@ async function executeLocalT5(text) {
     }
   }
 
-  return summary;
+  return summary.trim();
 }

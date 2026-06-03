@@ -1,3 +1,5 @@
+// content.js - Comprehensive Defluff Injection Engine
+
 // 1. Enhanced Heuristic Filter to catch salary, hiring, and layoff hooks
 function isFluffOrBroetry(text) {
   const lineCount = (text.match(/\n/g) || []).length;
@@ -23,12 +25,14 @@ function getPostHash(text) {
   return `bw_${Math.abs(hash)}`;
 }
 
-// 3. BROADVIEW NEWSPAPER TILE INJECTION ENGINE (RESILIENT TIMESTAMP FIX)
+// 3. BROADVIEW NEWSPAPER TILE INJECTION ENGINE (NON-DESTRUCTIVE REACT FIX)
 function injectSummarySafely(targetTextElement, parentCard, summaryText, isCached) {
-  // Clear original text nodes safely
-  targetTextElement.textContent = ''; 
+  // Guard check to prevent infinite re-injection loops
+  if (targetTextElement.querySelector('.defluff-summary')) {
+    return; 
+  }
 
-  // 💡 NEW TIMESTAMPS EXTRACTOR: Scope search strictly to the header block to avoid footer metric collisions
+  // Extract LinkedIn's relative time metadata identifiers safely
   let timeString = "recently"; 
   const headerContainer = parentCard.querySelector('.feed-shared-actor, .update-v2-social-activity__header, .feed-shared-text-view') || parentCard;
   const targetElements = headerContainer.querySelectorAll('span, a, small');
@@ -37,7 +41,6 @@ function injectSummarySafely(targetTextElement, parentCard, summaryText, isCache
     const text = element.textContent ? element.textContent.trim() : '';
     if (!text) continue;
 
-    // Rule A: Match conversational accessibility strings ("3 hours ago", "1 day ago")
     const longMatch = text.match(/\b(\d+)\s*(min|minute|hour|day|week|month|year)s?\s*ago\b/i);
     if (longMatch) {
       const value = longMatch[1];
@@ -48,57 +51,75 @@ function injectSummarySafely(targetTextElement, parentCard, summaryText, isCache
       break;
     }
 
-    // Rule B: Match shorthand notation tokens ("3h", "1d", "4m") safely isolated from adjacent words
     const shortMatch = text.match(/\b(\d+)([mhdwmy])\b/i);
     if (shortMatch) {
       const value = shortMatch[1];
       const unit = shortMatch[2].toLowerCase();
       
-      // Quick filter to protect against corporate metrics in headlines (e.g., $5M, B2B, 3D)
       if (['m', 'h', 'd', 'w', 'y'].includes(unit)) {
         if (unit === 'm' && (text.includes('$') || text.toUpperCase().includes('ARR') || text.toUpperCase().includes('MRR'))) {
           continue; 
         }
-        
-        const dictionary = {
-          'm': 'min',
-          'h': 'hour',
-          'd': 'day',
-          'w': 'week',
-          'mo': 'month',
-          'y': 'year'
-        };
-        
-        const expandedUnit = dictionary[unit] || unit;
+        const dictionary = { 'm': 'min', 'h': 'hour', 'd': 'day', 'w': 'week', 'mo': 'month', 'y': 'year' };
         const pluralSuffix = value > 1 ? 's' : '';
-        timeString = `${value} ${expandedUnit}${pluralSuffix} ago`;
+        timeString = `${value} ${dictionary[unit] || unit}${pluralSuffix} ago`;
         break;
       }
     }
   }
 
-  // Tag the full parent card container to enforce the newspaper aesthetic styles
+  // 💡 FIX: Tag the full top-level container card to wrap the ENTIRE assembly in double rules
   parentCard.classList.add('vintage-newspaper-tile');
 
-  // Build the underlying typography column asset
+  // Build the underlying typography column container asset
   const summaryContainer = document.createElement('div');
-  summaryContainer.className = 'brainwash-summary';
+  summaryContainer.className = 'defluff-summary';
   
   summaryContainer.style.setProperty("display", "block", "important");
   summaryContainer.style.setProperty("height", "auto", "important");
-  summaryContainer.style.setProperty("max-height", "none", "important");
-  summaryContainer.style.setProperty("overflow", "visible", "important");
 
+  // Format the primary header banner line
   const badgeElement = document.createElement('strong');
+  badgeElement.className = 'defluff-badge';
   badgeElement.textContent = isCached 
     ? `📰 DEFLUFFED (ARCHIVE) | ${timeString}` 
     : `📰 DEFLUFFED | ${timeString}`;
-
-  const textNode = document.createTextNode(summaryText);
   summaryContainer.appendChild(badgeElement);
-  summaryContainer.appendChild(textNode);
+
+  // VINTAGE COMMAND MENU TOOLBAR
+  const menuContainer = document.createElement('div');
+  menuContainer.className = 'defluff-menu';
+
+  const toggleTextBtn = document.createElement('button');
+  toggleTextBtn.className = 'defluff-btn';
+  toggleTextBtn.textContent = '📖 SHOW ORIGINAL TEXT';
+
+  menuContainer.appendChild(toggleTextBtn);
+  summaryContainer.appendChild(menuContainer);
+
+  // Build Isolated Summary Text Narrative Block
+  const summaryContent = document.createElement('div');
+  summaryContent.className = 'defluff-summary-text-content';
+  summaryContent.textContent = summaryText;
+  summaryContainer.appendChild(summaryContent);
   
+  // 💡 FIX: Append our summary alongside the untouched text nodes to keep React perfectly stable
   targetTextElement.appendChild(summaryContainer);
+
+  // INTERACTION EVENT LISTENER
+  let showingOriginalText = false;
+  toggleTextBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    showingOriginalText = !showingOriginalText;
+    if (showingOriginalText) {
+      parentCard.classList.add('show-original-active');
+      toggleTextBtn.textContent = '📰 SHOW DEFLUFFED';
+    } else {
+      parentCard.classList.remove('show-original-active');
+      toggleTextBtn.textContent = '📖 SHOW ORIGINAL TEXT';
+    }
+  });
 
   // Deep structural layout layout loop to overwrite nested constraints
   let currentElement = targetTextElement;
@@ -112,16 +133,17 @@ function injectSummarySafely(targetTextElement, parentCard, summaryText, isCache
     currentElement = currentElement.parentElement;
   }
 }
-// 4. MACRO-FIRST CORE ENGINE (diagnostic tracing enabled)
+
+// 4. MACRO-FIRST CORE ENGINE (CRITICAL SELECTOR FIX)
 function scanAndCleanFeed() {
-  const postCards = document.querySelectorAll('div.feed-shared-update-v2, .occludable-update, .feed-shared-update-v2__contents');
+  // 💡 FIX: Strictly target top-level post wrapper nodes to avoid layout boundary slicing
+  const postCards = document.querySelectorAll('div.feed-shared-update-v2, .occludable-update');
   
-  postCards.forEach((parentCard, index) => {
+  postCards.forEach((parentCard) => {
     if (parentCard.hasAttribute('data-defluffed') || parentCard.classList.contains('defluff-loading')) {
       return;
     }
 
-    // 1. UPDATED: Expanded selectors to capture more layout permutations (like text-views and commentary blocks)
     const targetTextElement = parentCard.querySelector(
       '.feed-shared-inline-show-more-text, ' +
       '.feed-shared-update-v2__description, ' +
@@ -130,23 +152,15 @@ function scanAndCleanFeed() {
       '.feed-shared-update-v2__commentary'
     );
 
-    // 2. FIXED: Silently skip non-post layout containers (ads, carousels, etc.) instead of logging warnings
-    if (!targetTextElement) {
-      return;
-    }
+    if (!targetTextElement) return;
 
     const postText = targetTextElement.innerText || targetTextElement.textContent;
     if (!postText || postText.trim().length < 10 || postText.includes("[defluff")) return;
 
     parentCard.setAttribute('data-defluffed', 'true');
 
-    const fluffCheck = isFluffOrBroetry(postText);
-    
-    if (fluffCheck) {
-      if (!chrome.runtime || !chrome.runtime.id) {
-        console.error("[Diagnostic] Extension context invalidated — reload the page after refreshing the extension.");
-        return;
-      }
+    if (isFluffOrBroetry(postText)) {
+      if (!chrome.runtime || !chrome.runtime.id) return;
 
       parentCard.classList.add('defluff-loading');
       const postHash = getPostHash(postText);
@@ -157,17 +171,8 @@ function scanAndCleanFeed() {
         postHash: postHash
       }, (response) => {
         parentCard.classList.remove('defluff-loading');
-
-        if (chrome.runtime.lastError) {
-          console.error("[Diagnostic] Message Port Error:", chrome.runtime.lastError.message);
-          return;
-        }
-
         if (response && response.success) {
-          console.log(`%c[defluff Sync] Output Success!`, "color: #00ff66");
           injectSummarySafely(targetTextElement, parentCard, response.summary, response.cached);
-        } else {
-          console.error("[Diagnostic] Background Engine failed:", response?.error);
         }
       });
     }

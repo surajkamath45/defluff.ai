@@ -10,7 +10,7 @@
    border-radius: 0px !important; /* Crisp right-angle corners */
 }
 
-/* 2. Force all inner nested LinkedIn layout elements to shed their modern styling */
+/* 2. Force inner nested components to shed their modern corporate styling */
 .vintage-newspaper-tile,
 .vintage-newspaper-tile div,
 .vintage-newspaper-tile section,
@@ -43,26 +43,144 @@
    border-radius: 0px !important;
 }
 
-/* 5. Seamlessly blend our inner summary block layout into the new theme */
-.brainwash-summary {
+/* 5. Cleanly wrap our inner summary container */
+.defluff-summary {
+   display: block !important;
    background-color: transparent !important;
    border: none !important;
    box-shadow: none !important;
    padding: 0 !important;
    margin-top: 10px !important;
-   text-align: justify !important;
-   font-size: 14.5px !important;
-   line-height: 1.5 !important;
 }
 
-.brainwash-summary strong {
+/* 6. Explicitly separate the headline banner onto its own block level line */
+.defluff-badge {
+   display: block !important;
    font-family: "Times New Roman", Times, serif !important;
    font-weight: 900 !important;
    text-transform: uppercase !important;
-   display: block !important;
    border-bottom: 2px solid #111111 !important; /* Section divider */
-   padding-bottom: 4px !important;
+   padding-bottom: 6px !important;
    margin-bottom: 10px !important;
    font-size: 13.5px !important;
    letter-spacing: 0.5px !important;
+   color: #111111 !important;
 }
+
+/* 7. Vintage option menu toolbar row alignment */
+.defluff-menu {
+    display: flex !important;
+    margin-top: 4px !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px dashed #111111 !important; /* Dotted print separator */
+    gap: 10px !important;
+}
+
+/* 8. Bracketed press layout buttons styles */
+.defluff-btn {
+    display: inline-block !important;
+    background: none !important;
+    border: 1px solid #111111 !important;
+    color: #111111 !important;
+    padding: 3px 8px !important;
+    cursor: pointer !important;
+    font-family: "Times New Roman", Times, Georgia, serif !important;
+    font-size: 10.5px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 0px !important;
+    transition: background 0.1s ease, color 0.1s ease !important;
+}
+
+.defluff-btn:hover {
+    background-color: #111111 !important;
+    color: #f4f1ea !important;
+}
+
+/* 9. Format layout block targeting summary narrative text */
+.defluff-summary-text-content {
+    display: block !important;
+    text-align: justify !important;
+    font-size: 14.5px !important;
+    line-height: 1.5 !important;
+    margin-top: 8px !important;
+    color: #111111 !important;
+}
+
+/* 10. 💡 FIX: SAFE TYPOGRAPHY VISIBILITY SWITCHING MASKS
+       Hides original children blocks by default without destroying React virtual node fibers */
+.vintage-newspaper-tile .feed-shared-inline-show-more-text > *:not(.defluff-summary),
+.vintage-newspaper-tile .feed-shared-update-v2__description > *:not(.defluff-summary),
+.vintage-newspaper-tile .update-components-text > *:not(.defluff-summary),
+.vintage-newspaper-tile .update-components-text-view > *:not(.defluff-summary),
+.vintage-newspaper-tile .feed-shared-update-v2__commentary > *:not(.defluff-summary) {
+    display: none !important;
+}
+
+/* Swap visibilities cleanly when original copy toggle state is active */
+.vintage-newspaper-tile.show-original-active .feed-shared-inline-show-more-text > *:not(.defluff-summary),
+.vintage-newspaper-tile.show-original-active .feed-shared-update-v2__description > *:not(.defluff-summary),
+.vintage-newspaper-tile.show-original-active .update-components-text > *:not(.defluff-summary),
+.vintage-newspaper-tile.show-original-active .update-components-text-view > *:not(.defluff-summary),
+.vintage-newspaper-tile.show-original-active .feed-shared-update-v2__commentary > *:not(.defluff-summary) {
+    display: block !important;
+}
+.vintage-newspaper-tile.show-original-active .defluff-summary-text-content {
+    display: none !important;
+}
+
+/* 11. NATIVE ACTIONS FORCE EXTENSION DISPLAY
+       Guarantees native elements stay rendering without crashes while drawing inside our master newspaper tile frame */
+.vintage-newspaper-tile .social-details-social-counts,
+.vintage-newspaper-tile .feed-shared-social-action-bar,
+.vintage-newspaper-tile .feed-shared-update-v2__social-details,
+.vintage-newspaper-tile .update-v2-social-activity__action-panel,
+.vintage-newspaper-tile [class*="social-action-bar"],
+.vintage-newspaper-tile .comments-comment-box,
+.vintage-newspaper-tile .comments-comments-list,
+.vintage-newspaper-tile [class*="comments-container"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+.vintage-newspaper-tile .feed-shared-social-action-bar,
+.vintage-newspaper-tile [class*="social-action-bar"] {
+    display: inline-flex !important; /* Forces row alignment of reaction links */
+}
+
+/* ==========================================================================
+   THE ULTIMATE UN-HIDING OVERRIDE FIX
+   Paste this at the VERY BOTTOM of your 200+ line styles.css file.
+   This explicitly forces the master container and action rows back to life.
+   ========================================================================== */
+
+   .vintage-newspaper-tile .update-v2-social-activity,
+   .vintage-newspaper-tile .feed-shared-social-action-bar,
+   .vintage-newspaper-tile .social-details-social-counts,
+   .vintage-newspaper-tile .feed-shared-update-v2__social-details,
+   .vintage-newspaper-tile .update-v2-social-activity__action-panel,
+   .vintage-newspaper-tile [class*="social-action-bar"],
+   .vintage-newspaper-tile .comments-comment-box,
+   .vintage-newspaper-tile .comments-comments-list,
+   .vintage-newspaper-tile [class*="comments-container"],
+   .update-v2-social-activity,
+   .feed-shared-social-action-bar {
+       display: block !important;
+       visibility: visible !important;
+       opacity: 1 !important;
+       height: auto !important;
+       max-height: none !important;
+       overflow: visible !important;
+   }
+   
+   /* Maintain horizontal row layout specifically for the reaction buttons */
+   .vintage-newspaper-tile .feed-shared-social-action-bar,
+   .vintage-newspaper-tile [class*="social-action-bar"],
+   .feed-shared-social-action-bar {
+       display: flex !important; 
+   }
